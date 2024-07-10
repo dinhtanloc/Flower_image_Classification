@@ -2,3 +2,6 @@
 *.zip
 *.png
 *.jpg
+.conda
+.history
+__pycache__
