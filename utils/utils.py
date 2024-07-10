@@ -1,21 +1,28 @@
 import os, numpy as np, tqdm, pandas as pd, matplotlib.pyplot as plt, cv2, time
 from albumentations import Compose, Resize, CenterCrop, PadIfNeeded, BasicTransform, ToFloat
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing.image import Iterator as KerasIterator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import Iterator as KerasIterator
 import matplotlib.pyplot as plt
 
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score, classification_report
 
 # Keras
-from keras.layers import GlobalAveragePooling2D, GlobalMaxPooling2D, Dense
-from keras.layers import Flatten, Dropout, Concatenate, BatchNormalization, Input, Convolution2D, MaxPooling2D, concatenate, Activation
-from keras.models import Model, Sequential, load_model
+from tensorflow.keras.layers import GlobalAveragePooling2D, GlobalMaxPooling2D, Dense
+from tensorflow.keras.layers import Flatten, Dropout, Concatenate, BatchNormalization, Input, Convolution2D, MaxPooling2D, concatenate, Activation
+from tensorflow.keras.models import Model, Sequential, load_model
 from keras import backend as K
-from keras.callbacks import LambdaCallback, Callback, EarlyStopping, TensorBoard
+from tensorflow.keras.callbacks import LambdaCallback, Callback, EarlyStopping, TensorBoard
 
-# emotion labels in FER2013 corresponding with [0-6]
-emotion_labels = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral"]
+# emotion labels in FER2013 corresponding with [0-13]
+flower_labels = ["carnation", "iris", "bellflower", "california_poppy", "rose", "astilbe", "tulip", 'calendula', 'dandelion', 'coreopsis', 'black_eyed_susan', 'water_lily', 'sunflower', 'common_daisy']
 
+
+__script_path=os.path.abspath(globals().get('__file__','.'))
+__script_dir = os.path.dirname(__script_path)
+
+base_dir=os.path.abspath(f'{__script_dir}/../')
+
+data_dir = os.path.join(base_dir, 'data').replace("\\", "/")
 """ *****************************************
 DATA LOADER, AUGMENTATION, AND GENERATOR
 ***************************************** """ 
@@ -28,8 +35,9 @@ class DataGenerator(KerasIterator):
         """
         self.dataloader = dataloader
         (x, y)          = self.dataloader[0]
-        self.x_shape    = x.shape
-        self.y_shape    = y.shape
+        print(x)
+        self.x_shape    = 9140
+        self.y_shape    = 4502
         self.current_batch = np.zeros(batch_size) # save current batch for easy debug
         self.preprocessing_image_fn = preprocessing_image_fn
         self.n_channels = n_channels
@@ -73,6 +81,7 @@ class DataGenerator(KerasIterator):
             index_array = next(self.index_generator)
         # The transformation of images is not under thread lock
         # so it can be done in parallel
+        
         return self._get_batches_of_transformed_samples(index_array)
     # next
 # DataGenerator
@@ -273,31 +282,28 @@ def processing_data(csv_path, output_dir):
     # for
 # processing_data
 
-def load_data(train_path, valid_path, test_path):
+def load_data(train_path, valid_path):
     """
-    Load data from saved npz files (train, valid, test)
+    Load data from CSV files (train, valid, test)
     Usage:
-        train_path = os.path.join(data_dir, "preprocessing", "train.npz")
-        valid_path = os.path.join(data_dir, "preprocessing", "valid.npz")
-        test_path = os.path.join(data_dir, "preprocessing", "test.npz")
+        train_path = 'path/to/train.csv'
+        valid_path = 'path/to/valid.csv'
         (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = load_data(train_path, valid_path, test_path)
     """
-    print("Read train images: ", train_path)
-    info = dict(np.load(train_path, allow_pickle=True))
-    x_train, y_train = info["images"], info["labels"]
+    print("Read train data: ", train_path)
+    train_data = pd.read_csv(train_path)
+    x_train = np.array(train_data['image:FILE'])
+    print(x_train)
+    y_train = np.array(train_data['category'])
 
-    print("Read valid images: ", valid_path)
-    info = dict(np.load(valid_path, allow_pickle=True))
-    x_valid, y_valid = info["images"], info["labels"]
+    print("Read valid data: ", valid_path)
+    valid_data = pd.read_csv(valid_path)
+    x_valid = np.array(valid_data['image:FILE'])
+    y_valid = np.array(valid_data['category'])
 
-    print("Read test images: ", test_path)
-    info = dict(np.load(test_path, allow_pickle=True))
-    x_test, y_test = info["images"], info["labels"]
-    
-    return (x_train, y_train), (x_valid, y_valid), (x_test, y_test)
-# load_data
+    return (x_train, y_train), (x_valid, y_valid)
 
-def view_hist_data(x_train, y_train, x_valid, y_valid, x_test, y_test, save_path = None):
+def view_hist_data(x_train, y_train, x_valid, y_valid, save_path = None):
     """
     View distribution of train, valid, test data
     Usage:
@@ -311,37 +317,36 @@ def view_hist_data(x_train, y_train, x_valid, y_valid, x_test, y_test, save_path
     """
     plt.figure(figsize=(24, 8))
 
-    train_hist, _ = np.histogram(y_train, bins = 7, range = (0, 7))
-    valid_hist, _ = np.histogram(y_valid, bins = 7, range = (0, 7))
-    test_hist, _  = np.histogram(y_test, bins = 7, range = (0, 7))
+    train_hist, _ = np.histogram(y_train, bins = len(flower_labels), range = (0, len(flower_labels)))
+    valid_hist, _ = np.histogram(y_valid, bins = len(flower_labels), range = (0, len(flower_labels)))
+    print(x_train[0])
 
-    print("Training images: ", len(x_train), " - shape: ", x_train[0].shape)
-    print("Validating images: ", len(x_valid), " - shape: ", x_valid[0].shape)
-    print("Testing images: ", len(x_test), " - shape: ", x_test[0].shape)
+    print("Training images: ", len(x_train), " - shape: ", plt.imread(os.path.join(data_dir,x_train[0]).replace("\\", "/")).shape)
+    print("Validating images: ", len(x_valid), " - shape: ", plt.imread(os.path.join(data_dir,x_valid[0]).replace("\\", "/")).shape)
 
-    plt.subplot(1,3,1)
-    plt.bar(range(7), train_hist, tick_label  = emotion_labels)
+    plt.subplot(1,2,1)
+    plt.bar(range(len(flower_labels)), train_hist, tick_label  = flower_labels)
     plt.xticks(fontsize=14, rotation=45)
     plt.yticks(fontsize=14, rotation=45)
     plt.xlabel("Emotion", fontsize = 16)
     plt.ylabel("Number of images", fontsize = 16)
     plt.title("Training Distribution (%d images)\n"%(len(x_train)), fontsize = 20)
 
-    plt.subplot(1,3,2)
-    plt.bar(range(7), valid_hist, tick_label  = emotion_labels)
+    plt.subplot(1,2,2)
+    plt.bar(range(len(flower_labels)), valid_hist, tick_label  = flower_labels)
     plt.xticks(fontsize=14, rotation=45)
     plt.yticks(fontsize=14, rotation=45)
     plt.xlabel("Emotion", fontsize = 16)
     plt.ylabel("Number of images", fontsize = 16)
     plt.title("Validating Distribution (%d images)\n"%(len(x_valid)), fontsize = 20)
 
-    plt.subplot(1,3,3)
-    plt.bar(range(7), test_hist, tick_label  = emotion_labels)
-    plt.xticks(fontsize=14, rotation=45)
-    plt.yticks(fontsize=14, rotation=45)
-    plt.xlabel("Emotion", fontsize = 16)
-    plt.ylabel("Number of images", fontsize = 16)
-    plt.title("Testing Distribution (%d images)\n"%(len(x_test)), fontsize = 20)
+    # plt.subplot(1,3,3)
+    # plt.bar(range(7), test_hist, tick_label  = flower_labels)
+    # plt.xticks(fontsize=14, rotation=45)
+    # plt.yticks(fontsize=14, rotation=45)
+    # plt.xlabel("Emotion", fontsize = 16)
+    # plt.ylabel("Number of images", fontsize = 16)
+    # plt.title("Testing Distribution (%d images)\n"%(len(x_test)), fontsize = 20)
     
     # save figure
     if save_path is not None:
@@ -380,12 +385,14 @@ def view_images(data, labels = None, view_ids = list(range(16)), rows = 4, cols 
             id_pos = row * cols + col
             if id_pos >= len(view_ids): continue
             view_data  =  data[view_ids[id_pos]]
+            view_data=os.path.join(data_dir,view_data).replace("\\", "/")
             view_label = labels[view_ids[id_pos]] if labels is not None else None
 
             plt.subplot(rows, cols, row * cols + col + 1)
-            plt.imshow(view_data, cmap='gray')
+            view_image = plt.imread(view_data)
+            plt.imshow(view_image)
             if labels is not None:
-                plt.title(emotion_labels[view_label])
+                plt.title(flower_labels[view_label])
             plt.axis("off")
         # for
     # for

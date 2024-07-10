@@ -4,16 +4,18 @@ from math import ceil
 from IPython import display
 import matplotlib.pyplot as plt
 import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import cv2
+# tensorflow.Keras
+from tensorflow.keras.optimizers import SGD, Adam
+from tensorflow.keras.losses import binary_crossentropy, categorical_crossentropy
 
-# Keras
-from keras.optimizers import SGD, Adam
-from keras.losses import binary_crossentropy, categorical_crossentropy
+from tensorflow.keras.layers import GlobalAveragePooling2D, GlobalMaxPooling2D, Dense
+from tensorflow.keras.layers import Flatten, Dropout, Concatenate, BatchNormalization, Input, Convolution2D, MaxPooling2D, concatenate, Activation
 
-from keras.layers import GlobalAveragePooling2D, GlobalMaxPooling2D, Dense
-from keras.layers import Flatten, Dropout, Concatenate, BatchNormalization, Input, Convolution2D, MaxPooling2D, concatenate, Activation
+from tensorflow.keras.models import Model, Sequential, load_model
 
-from keras.models import Model, Sequential, load_model
+from tensorflow.keras import backend as K
 
-from keras import backend as K
-
-from keras.callbacks import CSVLogger, LambdaCallback, ModelCheckpoint, EarlyStopping, TensorBoard
+from tensorflow.keras.callbacks import CSVLogger, LambdaCallback, ModelCheckpoint, EarlyStopping, TensorBoard
