@@ -1,6 +1,7 @@
 # config root dir, library path
 import os, sys
-root_dir      = os.path.abspath('../../').replace("\\", "/")
+root_dir      = os.path.abspath('../../../').replace("\\", "/")
+print(root_dir)
 source_dir    = os.path.join(root_dir, "prj").replace("\\", "/")
 libraries_dir = os.path.join(root_dir, "libraries").replace("\\", "/")
 include_dirs  = [source_dir]
@@ -10,8 +11,8 @@ for lib in include_dirs:
 
 # common info of project
 data_dir    = os.path.join(root_dir, "data").replace("\\", "/")
-dataset_dir = os.path.join(data_dir, "datasets").replace("\\", "/")
-exp_dir     = os.path.join(data_dir, "experiments").replace("\\", "/")
+# dataset_dir = os.path.join(data_dir, "datasets").replace("\\", "/")
+# exp_dir     = os.path.join(data_dir, "experiments").replace("\\", "/")
 
 # path of module
 module_dir        = os.path.abspath(".").replace("\\", "/")

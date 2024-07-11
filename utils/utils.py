@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_
 from tensorflow.keras.layers import GlobalAveragePooling2D, GlobalMaxPooling2D, Dense
 from tensorflow.keras.layers import Flatten, Dropout, Concatenate, BatchNormalization, Input, Convolution2D, MaxPooling2D, concatenate, Activation
 from tensorflow.keras.models import Model, Sequential, load_model
-from keras import backend as K
+# from keras import backend as K
 from tensorflow.keras.callbacks import LambdaCallback, Callback, EarlyStopping, TensorBoard
 
 # emotion labels in FER2013 corresponding with [0-13]
@@ -408,6 +408,35 @@ def view_images(data, labels = None, view_ids = list(range(16)), rows = 4, cols 
     plt.close()
 # view_images
 
+
+"""
+Plot the training and validation loss
+epochs - list of epoch numbers
+loss - training loss for each epoch
+val_loss - validation loss for each epoch
+"""
+def plot_loss(epochs, loss, val_loss):
+    plt.plot(epochs, loss, 'bo', label='Training Loss')
+    plt.plot(epochs, val_loss, 'orange', label = 'Validation Loss')
+    plt.title('Training and Validation Loss')
+    plt.legend()
+    plt.show()
+    
+    
+"""
+Plot the training and validation accuracy
+epochs - list of epoch numbers
+acc - training accuracy for each epoch
+val_acc - validation accuracy for each epoch
+"""
+def plot_accuracy(epochs, acc, val_acc):
+    plt.plot(epochs, acc, 'bo', label='Training accuracy')
+    plt.plot(epochs, val_acc, 'orange', label = 'Validation accuracy')
+    plt.title('Training and Validation Accuracy')
+    plt.legend()
+    plt.show()
+
+
 """ *****************************************
 UTILS
 ***************************************** """ 
@@ -446,14 +475,15 @@ def choose_keras_environment(gpus = ["0"], keras_backend = "tensorflow", verbose
 # init_session
 def init_session():
     import tensorflow as tf
-    from keras.backend.tensorflow_backend import set_session
-    config = tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
     config.log_device_placement = True  # to log device placement (on which device the operation ran)
                                         # (nothing gets printed in Jupyter, only if you run it standalone)
-    sess = tf.Session(config=config)
-    set_session(sess)  # set this TensorFlow session as the default session for Keras
+    # sess = tf.compat.v1.Session(config=config)
+    # tf.compat.v1.keras.backend.set_session(sess)  # set this TensorFlow session as the default session for Keras
 # init_session
+
+
 
 def visualize_logs(visualize_data, group_data, figsize = (10, 5), is_show = True, label_size = 12, title_size = 16, save_path = None):
     """

@@ -5,3 +5,7 @@
 .conda
 .history
 __pycache__
+*.h5
+*.keras
+wandb
+*.txt
