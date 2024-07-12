@@ -15,5 +15,5 @@ data_dir    = os.path.join(root_dir, "data").replace("\\", "/")
 exps_dir     = os.path.join(data_dir, "exps").replace("\\", "/")
 
 # path of module
-module_dir        = os.path.abspath(".").replace("\\", "/")
-relate_module_dir = os.path.relpath(module_dir, start=source_dir).replace("\\", "/")
+models_dir     = os.path.join(data_dir, "models").replace("\\", "/")
+weights_models_dir=os.path.join(models_dir, "weights").replace("\\", "/")
