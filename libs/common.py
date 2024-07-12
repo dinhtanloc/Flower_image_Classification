@@ -26,3 +26,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCh
 from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras import backend as K
+# K.set_image_data_format('channels_last')
+# from tensorflow.keras.utils import plot_model
+from tensorflow.keras.utils import plot_model
