@@ -1,6 +1,6 @@
 # config root dir, library path
 import os, sys
-root_dir      = os.path.abspath('../../..').replace("\\", "/")
+root_dir      = os.path.abspath('../../').replace("\\", "/")
 print(root_dir)
 source_dir    = os.path.join(root_dir, "prj").replace("\\", "/")
 libraries_dir = os.path.join(root_dir, "libraries").replace("\\", "/")

@@ -11,7 +11,7 @@ from tensorflow.keras.models import Model
 from keras_applications.imagenet_utils import _obtain_input_shape, decode_predictions
 from tensorflow.keras.layers import Flatten, Dense, Input, GlobalAveragePooling2D, \
     GlobalMaxPooling2D, Activation, Conv2D, MaxPooling2D, BatchNormalization, \
-    AveragePooling2D, Reshape, Permute, multiply, ReLU, ZeroPadding2D, DepthwiseConv2D, Concatenate
+    AveragePooling2D, Reshape, Permute, multiply, ReLU, ZeroPadding2D, DepthwiseConv2D, Concatenate, Dropout
 from keras.regularizers import l2
 from keras.applications import InceptionV3, ResNet50, VGG16
 
