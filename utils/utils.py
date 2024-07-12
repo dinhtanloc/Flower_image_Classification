@@ -693,7 +693,8 @@ def plot_confusion_matrix(y_test, y_pred, classes=None,
                           title_size=25,
                           axis_label_size=16,
                           tick_size=14, save_path=None, 
-                          has_colorbar = False):
+                          has_colorbar = False,
+                          ):
     """
     https://www.kaggle.com/grfiv4/plot-a-confusion-matrix
     This function prints and plots the confusion matrix.
@@ -702,42 +703,51 @@ def plot_confusion_matrix(y_test, y_pred, classes=None,
     from sklearn.metrics import confusion_matrix
     import itertools
 
-    cm = confusion_matrix(y_test, y_pred)
+    cm = confusion_matrix(y_test_labels, y_pred)
     acc = sum(cm.diagonal() / cm.sum()) * 100.0
+
     if normalize:
         cm = (cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]) * 100.0
-        if verbose == 1: print("Normalized confusion matrix")
+        if verbose == 1: 
+            print("Normalized confusion matrix")
     else:
-        if verbose == 1: print('Confusion matrix, without normalization')
+        if verbose == 1: 
+            print('Confusion matrix, without normalization')
 
-    if verbose == 1: print(cm)
+    if verbose == 1: 
+        print(cm)
 
+    # Vẽ hình
+    plt.figure(figsize=(20,20))
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title.format_map({'acc': acc}), fontsize=title_size)
-    if has_colorbar == True: plt.colorbar()
+    if has_colorbar:
+        plt.colorbar()
 
     if classes is not None:
         ax = plt.gca()
-        # tick_marks = np.arange(len(classes))
-        # plt.xticks(tick_marks, classes, rotation=45, fontsize=tick_size)
-        # plt.yticks(tick_marks, classes, fontsize=tick_size)
-        ax.set_xticklabels(classes, fontsize=tick_size, rotation=45)
-        ax.set_yticklabels(classes, fontsize=tick_size)
+        ax.set_xticklabels([''] + classes, fontsize=tick_size, rotation=45)
+        ax.set_yticklabels([''] + classes, fontsize=tick_size)
 
     fmt = '{:.' + '%d' % (precision) + 'f} %' if normalize else '{:d} %'
     thresh = cm.max() / 1.5 if normalize else cm.max() / 2
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         plt.text(j, i, fmt.format(cm[i, j]),
-                 horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black", fontsize=text_size)
+                horizontalalignment="center",
+                color="white" if cm[i, j] > thresh else "black", fontsize=text_size)
     plt.tight_layout()
     plt.ylabel('True label', fontsize=axis_label_size)
     plt.xlabel('Predicted label', fontsize=axis_label_size)
 
+    # Lưu hình nếu cần thiết
     if save_path is not None:
         dirname = os.path.dirname(save_path)
-        if dirname != "" and os.path.exists(dirname) == False: os.makedirs(dirname)
+        if dirname != "" and not os.path.exists(dirname):
+            os.makedirs(dirname)
         plt.savefig(save_path)
+
+    plt.show()  # Hiển thị hình ảnh
+
 # plot_confusion_matrix
 
 """ *****************************************
