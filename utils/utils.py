@@ -436,6 +436,15 @@ def plot_accuracy(epochs, acc, val_acc):
     plt.legend()
     plt.show()
 
+def boxPlot(results,models,figsize):
+    fig_mae = plt.figure(figsize=figsize)
+    fig_mae.suptitle('Comparison of performances among models')
+    ax_mae = fig_mae.add_subplot(111)
+    plt.boxplot(results)
+    ax_mae.set_xticklabels(models)
+    plt.ylabel('MAE')
+    plt.show()
+
 
 """ *****************************************
 UTILS

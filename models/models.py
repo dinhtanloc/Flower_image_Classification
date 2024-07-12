@@ -80,7 +80,7 @@ def inceptionv3_preprocessing_input(x):
     return tf_preprocess_input(x)
 # inceptionv3_preprocessing_input
 
-def build_common_model(weight_path = None, model_name = None, nb_classes = 7, fc=[2048, 0], dropout = [0.1, 0.1, 0.0], input_shape = None):
+def build_common_model(weight_path = None, model_name = None, nb_classes = 14, fc=[2048, 0], dropout = [0.1, 0.1, 0.0], input_shape = None):
     # base model
     base_model = None
     if model_name=="imagenet_inception_v3":
