@@ -15,6 +15,8 @@ The dataset consists of images of 14 types of flowers, with 13,618 training imag
 My project is structured into 7 folders:
 
 - **config**: Contains paths used frequently in this project. You can set paths for storing experiment results or configuring model parameters such as experiments or models.
+
+- **data**: Create a data folder in your project and unzip the zip file from Kaggle inside this folder
   
 - **libs**: Includes a list of packages imported for this project.
   
