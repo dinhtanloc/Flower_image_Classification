@@ -1,6 +1,8 @@
 # config root dir, library path
 import os, sys
-root_dir      = os.path.abspath('../../').replace("\\", "/")
+__script_path=os.path.abspath(globals().get('__file__','.'))
+__script_dir = os.path.dirname(__script_path)
+root_dir = os.path.abspath(os.path.dirname(f'{__script_dir}')).replace("\\", "/")
 print(root_dir)
 source_dir    = os.path.join(root_dir, "prj").replace("\\", "/")
 libraries_dir = os.path.join(root_dir, "libraries").replace("\\", "/")
@@ -15,5 +17,5 @@ data_dir    = os.path.join(root_dir, "data").replace("\\", "/")
 exps_dir     = os.path.join(data_dir, "exps").replace("\\", "/")
 
 # path of module
-models_dir     = os.path.join(data_dir, "models").replace("\\", "/")
+models_dir     = os.path.join(root_dir, "models").replace("\\", "/")
 weights_models_dir=os.path.join(models_dir, "weights").replace("\\", "/")

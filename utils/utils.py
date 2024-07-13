@@ -703,6 +703,7 @@ def plot_confusion_matrix(y_test, y_pred, classes=None,
                           axis_label_size=16,
                           tick_size=14, save_path=None, 
                           has_colorbar = False,
+                        #   figsize
                           ):
     """
     https://www.kaggle.com/grfiv4/plot-a-confusion-matrix
@@ -712,7 +713,7 @@ def plot_confusion_matrix(y_test, y_pred, classes=None,
     from sklearn.metrics import confusion_matrix
     import itertools
 
-    cm = confusion_matrix(y_test_labels, y_pred)
+    cm = confusion_matrix(y_test, y_pred)
     acc = sum(cm.diagonal() / cm.sum()) * 100.0
 
     if normalize:
