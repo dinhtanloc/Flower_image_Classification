@@ -14,7 +14,7 @@ for lib in include_dirs:
 # common info of project
 data_dir    = os.path.join(root_dir, "data").replace("\\", "/")
 # dataset_dir = os.path.join(data_dir, "datasets").replace("\\", "/")
-exps_dir     = os.path.join(data_dir, "exps").replace("\\", "/")
+exps_dir     = os.path.join(root_dir, "exps").replace("\\", "/")
 
 # path of module
 models_dir     = os.path.join(root_dir, "models").replace("\\", "/")

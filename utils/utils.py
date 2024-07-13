@@ -703,7 +703,7 @@ def plot_confusion_matrix(y_test, y_pred, classes=None,
                           axis_label_size=16,
                           tick_size=14, save_path=None, 
                           has_colorbar = False,
-                        #   figsize
+                          figsize=(10,10)
                           ):
     """
     https://www.kaggle.com/grfiv4/plot-a-confusion-matrix
@@ -728,7 +728,7 @@ def plot_confusion_matrix(y_test, y_pred, classes=None,
         print(cm)
 
     # Vẽ hình
-    plt.figure(figsize=(20,20))
+    plt.figure(figsize=figsize)
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title.format_map({'acc': acc}), fontsize=title_size)
     if has_colorbar:
