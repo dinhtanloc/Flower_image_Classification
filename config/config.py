@@ -15,7 +15,9 @@ for lib in include_dirs:
 data_dir    = os.path.join(root_dir, "data").replace("\\", "/")
 # dataset_dir = os.path.join(data_dir, "datasets").replace("\\", "/")
 exps_dir     = os.path.join(root_dir, "exps").replace("\\", "/")
+prj_dir     = os.path.join(root_dir, "prj").replace("\\", "/")
 
 # path of module
 models_dir     = os.path.join(root_dir, "models").replace("\\", "/")
 weights_models_dir=os.path.join(models_dir, "weights").replace("\\", "/")
+weights_prj_dir=os.path.join(models_dir, '4.build_and_improve', "weights").replace("\\", "/")
