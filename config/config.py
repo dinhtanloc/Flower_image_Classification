@@ -20,4 +20,4 @@ prj_dir     = os.path.join(root_dir, "prj").replace("\\", "/")
 # path of module
 models_dir     = os.path.join(root_dir, "models").replace("\\", "/")
 weights_models_dir=os.path.join(models_dir, "weights").replace("\\", "/")
-weights_prj_dir=os.path.join(models_dir, '4.build_and_improve', "weights").replace("\\", "/")
+weights_prj_dir=os.path.join(prj_dir, '4.build_and_improve', "weights").replace("\\", "/")
